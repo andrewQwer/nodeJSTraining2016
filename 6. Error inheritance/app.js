@@ -8,7 +8,7 @@ util.inherits(PhraseError, Error);
 PhraseError.prototype.name = "PhraseError";
 
 
-function HttpError(status,message) {
+function HttpError(status, message) {
     this.message = message;
     this.status = status;
     Error.captureStackTrace(this);
@@ -19,7 +19,7 @@ HttpError.prototype.name = "HttpError";
 var phrases = {
     "Hello": "Привет",
     "World": "мир"
-}
+};
 
 function getPhrase(name) {
     if (!phrases[name]) {
@@ -37,10 +37,10 @@ function makePage(url) {
 try {
     var page = makePage('index.html');
     console.log(page);
-}catch(e){
-    if (e instanceof HttpError){
+} catch (e) {
+    if (e instanceof HttpError) {
         console.log(e.status, e.message);
-    } else{
+    } else {
         console.error("Ошибка %s\n Сообщение: %s\n стек: %s", e.name, e.message, e.stack)
     }
 }
