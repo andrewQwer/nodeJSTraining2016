@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <p class="lead">Welcome to the chat</p>
+
+    <form id="publish">
+        <input type="text" name="message" />
+        <input type="submit" value="Send"/>
+    </form>
+
+    <ul id="messages"></ul>
+</body>
+    <script>
+        publish.onsubmit = function(){
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/publish', true);
+            xhr.send(JSON.stringify({ message: this.elements.message.value }));
+
+            this.elements.message.value = '';
+
+            return false;
+        };
+
+        subscribe();
+
+        function subscribe(){
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', '/subscribe', true);
+
+            xhr.onload = function(){
+                var li = document.createElement('li');
+                li.textContent = this.responseText;
+                messages.appendChild(li);
+
+                subscribe();
+            };
+
+            xhr.onerror = xhr.abort = function() {
+                setTimeout(subscribe, 500);
+            };
+
+            xhr.send('');
+        }
+    </script>
+</html>
