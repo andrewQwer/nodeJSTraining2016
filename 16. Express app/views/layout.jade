@@ -3,5 +3,13 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/vendor/bootstrap/dist/css/bootstrap.css')
+    script(type='text/javascript', src='/vendor/jQuery/dist/jQuery.js')
+    script(type='text/javascript', src='/vendor/bootstrap/dist/js/bootstrap.js')
   body
-    block content
+    header
+    section.container
+      include navigation.jade
+      block content
+    footer
+      block footer
