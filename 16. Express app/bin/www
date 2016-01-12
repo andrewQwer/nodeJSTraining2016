@@ -8,12 +8,15 @@ var app = require('../app');
 var debug = require('debug')('16. Express app:server');
 var http = require('http');
 var config = require('../config');
+var logger = require('../libs/log')(module);
+
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(config.get('port'));
 app.set('port', port);
+logger.info("App is running on port "+ port);
 
 /**
  * Create HTTP server.
