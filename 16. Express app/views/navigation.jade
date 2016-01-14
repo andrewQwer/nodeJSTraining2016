@@ -2,7 +2,14 @@ nav.navbar.navbar-default
     .collapse.navbar-collapse
         ul.nav.navbar-nav
             li
-                a(href="/") Гланвая
+                a(href="/") Главная
+            if user
+                li
+                    a(href="/chat") Чат
         ul.nav.navbar-nav.navbar-right
-            li
-                a(href="/login") Войти
+            if user
+                li
+                    a(href="#",onClick="$('<form method=post action=/logout>').submit();return false") Выйти
+            else
+                li
+                    a(href="/login") Войти
