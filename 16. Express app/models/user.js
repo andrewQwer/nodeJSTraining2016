@@ -71,6 +71,7 @@ schema.methods.checkPassword = function (password) {
 
 exports.User = mongoose.model('User', schema);
 
+/*
 function AuthError(message){
     Error.apply(this, arguments);
     Error.captureStackTrace(this, AuthError);
@@ -82,4 +83,4 @@ util.inherits(AuthError, Error);
 
 AuthError.prototype.name = 'AuthError';
 
-exports.AuthError = AuthError;
+exports.AuthError = AuthError;*/
