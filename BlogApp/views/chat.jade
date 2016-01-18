@@ -1,0 +1,74 @@
+extends layout
+
+block content
+    script(src="/socket.io/socket.io.js")
+
+    h1 Чат
+
+    div#room
+        form
+            input(type="text",autocomplete="off", placeholder="Put your message").form-control
+        ul
+    script.
+        var socket = io.connect();
+
+        var form = $('#room form'),
+                ul = $('#room ul'),
+                input = $('#room input');
+
+        socket
+                .on('message', function (username, text) {
+                    printMessage(username + ': ' + text);
+                })
+                .on('leave', function (username) {
+                    printStatus(username + 'вышел');
+                })
+                .on('join', function (username) {
+                    printStatus(username + ' подключился')
+                })
+                .on('connect', function () {
+                    printStatus('Соединение установлено');
+                    form.on('submit', sendMessage);
+                    input.prop('disabled', false);
+                })
+                .on('session:reload', function () {
+                    location.href = '/'
+                })
+                .on('disconnect', function () {
+                    printStatus('Соединение потеряно');
+                    form.off('submit', sendMessage);
+                    input.prop('disabled', true);
+                    setTimeout(reconnect, 500);
+                })
+                .on('logout', function () {
+                    location.href = '/'
+                })
+                .on('error', function (reason) {
+                    setTimeout(reconnect, 500);
+                });
+
+        function sendMessage() {
+            var text = input.val();
+            socket.emit('message', text, function () {
+                printMessage('Я: ' + text);
+            });
+
+            input.val('');
+            return false;
+        }
+
+        function printMessage(message) {
+            $('<li>', {text: message}).appendTo(ul);
+        }
+
+        function reconnect() {
+            console.log('Переподключение...')
+            socket.once('error', function () {
+                setTimeout(reconnect, 500);
+            });
+            socket.socket.reconnect();
+        }
+
+        function printStatus(status) {
+            $('<li>').append($('<i>').text(status)).appendTo(ul);
+        }

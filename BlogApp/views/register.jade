@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1 Register page
+
+    form(action="/register",method="POST")
+        div.form-group
+            label(for="username") Login
+            input(type="text",placeholder="Login",name="username").form-control#username
+        div.form-group
+            label(for="password") Password
+            input(type="password",placeholder="Password",name="password").form-control#password
+        div.form-group
+            label(for="rpassword") Repeat password
+            input(type="rpassword",placeholder="Password",name="repeatPassword").form-control#rpassword
+        button(type="submit").btn.btn-default Submit
