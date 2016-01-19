@@ -1,8 +1,7 @@
-var config = require('./../config');
+var mongoose = require('./mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
-module.exports = new MongoStore({
-    url: config.get('mongoose:uri'),
-    autoRemove: 'native'
-});
+var sessionStore = new MongoStore({mongooseConnection: mongoose.connections[0]});
+
+module.exports = sessionStore;

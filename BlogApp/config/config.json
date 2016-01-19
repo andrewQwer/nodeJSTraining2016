@@ -1,13 +1,8 @@
 {
   "port": 3000,
   "mongoose": {
-    "uri": "mongodb://localhost/chat",
-    "options": {
-      "server": {
-        "socketOptions": {
-          "keepAlive": 1
-        }
-      }
+    "development": {
+      "uri": "mongodb://andrewQwer:2138877qwer@ds047085.mongolab.com:47085/blogtestapp"
     }
   },
   "session": {

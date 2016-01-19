@@ -1,30 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var User = require('./../models/user').User;
-var AuthError = require('./../models/user').AuthError;
-var async = require('async');
-var HttpError = require('./../error').HttpError;
+var UserDAO = require('../DAL/userDao');
 
-router.get('/', function(req, res, next) {
+exports.get = function(req, res, next) {
     res.render('register');
-});
+};
 
-router.post('/', function (req, res, next) {
-    var username = req.body.username;
-    var password = req.body.password;
-
-    User.authorize(username, password, function (err, user) {
-        if(err) {
-            if(err instanceof AuthError){
-                return next(new HttpError(403, err.message));
-            } else {
-                return next(err);
-            }
+exports.post = function (req, res, next) {
+    var login = req.body.login,
+        email = req.body.email,
+        pass = req.body.password;
+    var dal = new UserDAO();
+    dal.register(login, pass, email, function (err, user) {
+        if (err) {
+            return next(err);
         }
-
         req.session.user = user._id;
-        res.redirect('/chat');
-    })
-});
-
-module.exports = router;
+        res.redirect('/');
+    });
+};

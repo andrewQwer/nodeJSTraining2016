@@ -25,8 +25,6 @@ function LoadUser(session, callback) {
 
     User.findById(session.user, function (err, user) {
         if (err) return callback(err);
-        console.log('session: ' + session)
-
         if (!user) {
             return callback(null, null);
         }
@@ -45,7 +43,7 @@ module.exports = function (server) {
         async.waterfall([
             function (callback) {
                 var sid = socket.request.signedCookies['connect.' + config.get('session:key')];
-                console.log('auth sid ' + sid)
+                //console.log('auth sid ' + sid)
 
                 LoadSession(sid, callback)
             },
@@ -77,7 +75,7 @@ module.exports = function (server) {
     }
 
     io.sockets.on('session:reload', function (sid) {
-        console.log('sid: ' + sid)
+//        console.log('sid: ' + sid)
     })
 
     io.sockets.on('connection', function (socket) {

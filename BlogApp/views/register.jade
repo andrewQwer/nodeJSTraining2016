@@ -5,8 +5,11 @@ block content
 
     form(action="/register",method="POST")
         div.form-group
-            label(for="username") Login
-            input(type="text",placeholder="Login",name="username").form-control#username
+            label(for="login") Login
+            input(type="text",placeholder="Login",name="login").form-control#login
+        div.form-group
+            label(for="Email") Email
+            input(type="text",placeholder="Email",name="email").form-control#Email
         div.form-group
             label(for="password") Password
             input(type="password",placeholder="Password",name="password").form-control#password

@@ -1,15 +1,35 @@
 var crypto = require('crypto');
 var async = require('async');
 var util = require('util');
-
+var validate = require('mongoose-validator');
 var mongoose = require('./../libs/mongoose'),
     Schema = mongoose.Schema;
 
+var UserRoles = ['Anonymous', 'Registered', 'Administrator'];
+
+var emailValidator = [
+    validate({
+        validator:"isEmail"
+    })
+]
+
 var schema = new Schema({
-    username: {
+    login: {
         type: String,
         unique: true,
-        require: true
+        trim: true,
+        required: true,
+        lowercase: true,
+        index: true
+    },
+    email: {
+        type: String,
+        lowercase: true,
+        trim: true,
+        unique: true,
+        required: true,
+        index: true,
+        validate: emailValidator
     },
     hashedPassword: {
         type: String,
@@ -19,11 +39,30 @@ var schema = new Schema({
         type: String,
         required: true
     },
+    role: {
+        type: String,
+        required: true,
+        enum: UserRoles
+    },
+    lastLoginDate: {
+        type: Date,
+        default: Date.now
+    },
     created: {
         type: Date,
         default: Date.now
     }
 });
+
+
+schema.methods.updateLastLoggedIn = function () {
+    'use strict';
+    this.update({lastLoginDate: new Date()}, function (err) {
+        if (err) {
+            log.error('Error updating last login date: ' + err.message);
+        }
+    });
+};
 
 schema.methods.encryptPassword = function (password) {
     return crypto.createHmac('sha1', this.salt)
@@ -41,45 +80,14 @@ schema.virtual('password')
         return this._plainPassword;
     });
 
-schema.statics.authorize = function(username, password, callback){
-    var User = this;
-    async.waterfall([
-        function (callback) {
-            User.findOne({username: username}, callback)
-        },
-        function (user, callback) {
-            if(user){
-                if(user.checkPassword(password)){
-                    callback(null, user);
-                } else {
-                    callback(new AuthError('Incorrect password'));
-                }
-            } else {
-                var user = new User({ username: username, password: password });
-                user.save(function (err) {
-                    if(err) return callback(err);
-                    callback(null, user);
-                })
-            }
-        }
-    ], callback);
-};
-
 schema.methods.checkPassword = function (password) {
     return this.encryptPassword(password) === this.hashedPassword;
 };
 
+schema.statics.UserRoles = {
+    Anonymous: UserRoles[0],
+    Registered: UserRoles[1],
+    Administrator: UserRoles[2]
+};
+
 exports.User = mongoose.model('User', schema);
-
-function AuthError(message){
-    Error.apply(this, arguments);
-    Error.captureStackTrace(this, AuthError);
-
-    this.message = message;
-}
-
-util.inherits(AuthError, Error);
-
-AuthError.prototype.name = 'AuthError';
-
-exports.AuthError = AuthError;
