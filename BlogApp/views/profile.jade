@@ -9,7 +9,7 @@ block content
                 form(action='/profile/delete',method='POST')
                     input(type='submit',value='Удалить',title='Удалить профиль').btn.btn-danger.btn-xs
             .media-body
-                form(action='/register', method="POST",class='form-horizontal')
+                form(action='/profile/edit', method="POST",class='form-horizontal')
                     div.form-group
                         label(for="").col-sm-1.control-label Логин
                         .col-sm-4
@@ -17,7 +17,7 @@ block content
                     div.form-group
                         label(for="").col-sm-1.control-label Email
                         .col-sm-4
-                            input(type="email",value="#{user.get('email')}").form-control
+                            input(type="email",value="#{user.get('email')}",name='email').form-control
                     div.form-group
                         .col-sm-1.col-sm-offset-1
                             input(type="submit",value="Сохранить").btn.btn-primary

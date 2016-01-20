@@ -108,10 +108,31 @@ module.exports = function () {
         User.remove({_id: userId}, callback);
     }
 
+    function updateProfile(userId, email, callback) {
+        email = escape(email).toLowerCase();
+        User.findOne({email: email,_id:{$ne:userId}}, function (err, doc) {
+            if (err) {
+                return callback(err);
+            }
+            if (doc) {
+                console.log(doc._id !== userId);
+                return callback(new AuthError("Пользователь с таким email уже существует"));
+            }
+            User.findOne({_id: userId}, function (err, doc) {
+                if (err) {
+                    return callback(err)
+                }
+                doc.email = email;
+                doc.save(callback);
+            })
+        });
+    }
+
     return {
         authorize: authorize,
         register: register,
         getUser: getUser,
-        deleteProfile: deleteProfile
+        deleteProfile: deleteProfile,
+        updateProfile: updateProfile
     };
 }

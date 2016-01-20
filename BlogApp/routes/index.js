@@ -18,5 +18,6 @@ module.exports = function (app) {
   app.get('/chat', checkAuth, require('./chat').get);
   app.get('/profile', checkAuth, require('./profile').get);
   app.post('/profile/delete', checkAuth, require('./profile').delete);
+  app.post('/profile/edit', checkAuth, require('./profile').post);
 
 };
