@@ -4,6 +4,7 @@ nav.navbar.navbar-default
             li: a(href="/") Главная
             if user
                 li: a(href="/chat") Чат
+                li: a(href="/profile") Профиль
         ul.nav.navbar-nav.navbar-right
             if user
                 li: a(href="#",onClick="$('<form method=post action=/logout>').submit();return false") Выйти

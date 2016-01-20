@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1 Настройки пользователя
+    .well
+        .media
+            .media-left
+                img.media-object(src="images/userpic.png", style="width: 64px; height: 64px;")
+                form(action='/profile/delete',method='POST')
+                    input(type='submit',value='Удалить',title='Удалить профиль').btn.btn-danger.btn-xs
+            .media-body
+                form(action='/register', method="POST",class='form-horizontal')
+                    div.form-group
+                        label(for="").col-sm-1.control-label Логин
+                        .col-sm-4
+                            p.form-control-static #{user.get('login')}
+                    div.form-group
+                        label(for="").col-sm-1.control-label Email
+                        .col-sm-4
+                            input(type="email",value="#{user.get('email')}").form-control
+                    div.form-group
+                        .col-sm-1.col-sm-offset-1
+                            input(type="submit",value="Сохранить").btn.btn-primary
+

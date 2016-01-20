@@ -71,13 +71,13 @@ module.exports = function () {
                 },
                 function (user, callback) {
                     if (user) {
-                        return callback(new AuthError('User with the same login already exists'));
+                        return callback(new AuthError('Пользователь с таким логином уже существует'));
                     }
                     User.findOne({email: email}, callback);
                 },
                 function (user, callback) {
                     if (user) {
-                        return callback(new AuthError('User with the same email already exists'));
+                        return callback(new AuthError('Пользователь с таким емелом уже существует'));
                     }
                     var newUser = new User({
                         login: login,
@@ -92,7 +92,7 @@ module.exports = function () {
                     if (err instanceof AuthError) {
                         return callback(err);
                     }
-                    callback(new AuthError('Some error occured during registration'));
+                    callback(new AuthError('Ошибка во время регистрации'));
                     log.error(err.toString());
                     return;
                 }
@@ -104,9 +104,14 @@ module.exports = function () {
         User.findById(userId, callback);
     }
 
+    function deleteProfile(userId, callback) {
+        User.remove({_id: userId}, callback);
+    }
+
     return {
         authorize: authorize,
         register: register,
-        getUser: getUser
+        getUser: getUser,
+        deleteProfile: deleteProfile
     };
 }
